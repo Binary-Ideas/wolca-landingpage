@@ -26,6 +26,28 @@ export const metadata: Metadata = {
     "STEM Christian academy",
     "private school Springfield",
   ],
+  icons: {
+    icon: [
+      {
+        url: "/images/cropped-favicon-32x32.png",
+        sizes: "32x32",
+        type: "image/png",
+      },
+      {
+        url: "/images/cropped-favicon-192x192.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
+    ],
+    apple: {
+      url: "/images/cropped-favicon-180x180.webp",
+      sizes: "180x180",
+      type: "image/webp",
+    },
+  },
+  other: {
+    "msapplication-TileImage": "/images/cropped-favicon-270x270.png",
+  },
 };
 
 export default function RootLayout({

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import TourRequestForm from "@/app/components/tour-request-form";
 
 const trustPoints = [
   "Preschool - 8th Grade",
@@ -346,58 +347,7 @@ export default function Home() {
                 Schedule Your Private Tour Today
               </a>
             </div>
-            <div className="card-surface p-6 sm:p-8">
-              <h3 className="text-xl font-bold text-brand-navy">
-                Request a Private Tour
-              </h3>
-              <p className="mt-2 text-sm text-slate-600">
-                Submit your details and our admissions team will contact you.
-              </p>
-              <form className="mt-6 grid gap-4" action="#">
-                <label className="grid gap-1 text-sm font-semibold text-brand-navy">
-                  Parent Name
-                  <input
-                    required
-                    type="text"
-                    name="name"
-                    className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-brand-navy focus:outline-none"
-                    placeholder="Your full name"
-                  />
-                </label>
-                <label className="grid gap-1 text-sm font-semibold text-brand-navy">
-                  Email Address
-                  <input
-                    required
-                    type="email"
-                    name="email"
-                    className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-brand-navy focus:outline-none"
-                    placeholder="you@example.com"
-                  />
-                </label>
-                <label className="grid gap-1 text-sm font-semibold text-brand-navy">
-                  Student Grade Interest
-                  <select
-                    name="grade"
-                    className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-brand-navy focus:outline-none"
-                    defaultValue="Preschool"
-                  >
-                    <option>Preschool</option>
-                    <option>K5</option>
-                    <option>1st Grade</option>
-                    <option>2nd Grade</option>
-                    <option>3rd Grade</option>
-                    <option>4th Grade</option>
-                    <option>5th Grade</option>
-                    <option>6th Grade</option>
-                    <option>7th Grade</option>
-                    <option>8th Grade</option>
-                  </select>
-                </label>
-                <button type="submit" className="btn-primary w-full">
-                  Schedule Your Private Tour Today
-                </button>
-              </form>
-            </div>
+            <TourRequestForm />
           </div>
         </section>
       </main>
