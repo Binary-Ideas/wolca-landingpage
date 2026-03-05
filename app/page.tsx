@@ -75,8 +75,15 @@ export default function Home() {
     <div className="min-h-screen bg-surface-muted text-foreground">
       <header className="sticky top-0 z-40 border-b border-white/10 bg-brand-navy/95 backdrop-blur">
         <div className="content-wrap flex items-center justify-between py-4">
-          <a href="#top" className="text-base font-semibold text-white sm:text-lg">
-            Word of Life Christian Academy
+          <a href="#top" className="inline-flex items-center">
+            <Image
+              src="/images/logo.png"
+              alt="Word of Life Christian Academy logo"
+              width={1016}
+              height={304}
+              className="h-10 w-auto sm:h-12"
+              priority
+            />
           </a>
           <nav aria-label="Primary navigation" className="hidden gap-6 md:flex">
             {navItems.map((item) => (
