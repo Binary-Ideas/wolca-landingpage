@@ -309,7 +309,7 @@ export default function Home() {
                 </a>
               </div>
             </div>
-            <aside className="card-surface border-white/15 bg-white/10 p-6 text-slate-100 backdrop-blur">
+            <aside className="rounded-2xl border border-white/20 bg-brand-navy-strong/85 p-6 text-slate-100 shadow-xl backdrop-blur">
               <p className="text-sm font-semibold tracking-wide text-brand-gold uppercase">
                 Enrollment Snapshot
               </p>
@@ -320,7 +320,7 @@ export default function Home() {
                 Families are encouraged to schedule a private tour early to
                 discuss grade availability and enrollment timelines.
               </p>
-              <div className="mt-6 space-y-3 border-t border-white/15 pt-6 text-sm">
+              <div className="mt-6 space-y-3 border-t border-white/20 pt-6 text-sm text-slate-100">
                 <p>Preschool and K5-8th Grade admissions support</p>
                 <p>Personalized enrollment guidance</p>
                 <p>Faith-based academic roadmap discussion</p>
