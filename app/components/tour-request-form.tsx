@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
+import { useGHLFormSubmit } from "@/hooks/useGHLFormSubmit";
 
 const gradeOptions = [
   "Preschool",
@@ -29,6 +30,29 @@ function formatPhoneNumber(value: string): string {
 
 export default function TourRequestForm() {
   const [phone, setPhone] = useState("");
+  const { submitLead, isSubmitting, error, isSuccess } = useGHLFormSubmit();
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formElement = event.currentTarget;
+    const formData = new FormData(formElement);
+    const name = String(formData.get("name") ?? "").trim();
+    const email = String(formData.get("email") ?? "").trim();
+    const grade = String(formData.get("grade") ?? "").trim();
+
+    const result = await submitLead({
+      name,
+      email,
+      phone,
+      grade,
+    });
+
+    if (result.success) {
+      formElement.reset();
+      setPhone("");
+    }
+  };
 
   return (
     <div className="card-surface p-6 sm:p-8">
@@ -36,13 +60,15 @@ export default function TourRequestForm() {
       <p className="mt-2 text-sm text-slate-600">
         Submit your details and our admissions team will contact you.
       </p>
-      <form className="mt-6 grid gap-4" action="#">
+      <form className="mt-6 grid gap-4" onSubmit={handleSubmit}>
         <label className="grid gap-1 text-sm font-semibold text-brand-navy">
           Parent Name
           <input
             required
             type="text"
             name="name"
+            autoComplete="name"
+            disabled={isSubmitting}
             className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-brand-navy focus:outline-none"
             placeholder="Your full name"
           />
@@ -53,6 +79,8 @@ export default function TourRequestForm() {
             required
             type="email"
             name="email"
+            autoComplete="email"
+            disabled={isSubmitting}
             className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-brand-navy focus:outline-none"
             placeholder="you@example.com"
           />
@@ -66,6 +94,7 @@ export default function TourRequestForm() {
             inputMode="numeric"
             autoComplete="tel"
             value={phone}
+            disabled={isSubmitting}
             onChange={(event) => setPhone(formatPhoneNumber(event.target.value))}
             pattern={"\\(\\d{3}\\)\\s\\d{3}-\\d{4}"}
             maxLength={14}
@@ -79,15 +108,37 @@ export default function TourRequestForm() {
             name="grade"
             className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-brand-navy focus:outline-none"
             defaultValue="Preschool"
+            disabled={isSubmitting}
           >
             {gradeOptions.map((grade) => (
               <option key={grade}>{grade}</option>
             ))}
           </select>
         </label>
-        <button type="submit" className="btn-primary w-full">
-          Schedule Your Private Tour Today
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-75"
+        >
+          {isSubmitting ? "Submitting..." : "Schedule Your Private Tour Today"}
         </button>
+        {error ? (
+          <p
+            role="alert"
+            className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+          >
+            {error}
+          </p>
+        ) : null}
+        {isSuccess ? (
+          <p
+            role="status"
+            className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800"
+          >
+            Thanks! Your tour request has been received. Our admissions team will
+            reach out soon.
+          </p>
+        ) : null}
       </form>
     </div>
   );
