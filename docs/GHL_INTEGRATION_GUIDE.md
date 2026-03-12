@@ -3,7 +3,7 @@
 > **Client:** Word of Life Christian Academy (WOLCA)  
 > **Service:** Private Tour Request (Admissions)  
 > **Stack:** Next.js (App Router) + Vercel + GHL Private Integration API v2  
-> **Primary tag added by API payload:** `wolca_organic`
+> **Primary tag added by API payload:** `GHL_PRIMARY_TAG` (default: `wolca_organic`)
 
 ---
 
@@ -14,11 +14,11 @@
         |                     |                          |
    Parent submits        Server-side token          Creates/updates contact
    name, email,          (never in browser)         + writes custom fields
-   phone, grade                                     + adds wolca_organic tag
+   phone, grade                                     + adds env-driven lead tag
                                                             |
                                                      [Admissions Workflow Trigger]
                                                      Trigger: Contact Tag Added
-                                                     Filter: wolca_organic
+                                                     Filter: value of GHL_PRIMARY_TAG
 ```
 
 **Why this architecture**
@@ -87,6 +87,7 @@ Set these in Vercel project settings and locally in `.env.local`:
 | `GHL_PRIVATE_TOKEN` | Yes | Private Integration API token |
 | `GHL_LOCATION_ID` | Yes | GHL location/sub-account ID |
 | `GHL_CF_GRADE_INTEREST` | Yes | Custom field ID for grade interest |
+| `GHL_PRIMARY_TAG` | No (recommended) | Tag added to each submitted lead (defaults to `wolca_organic` if not set) |
 | `GHL_CF_SERVICE_TYPE` | No | Custom field ID for service type |
 | `GHL_CF_LANDING_SOURCE` | No | Custom field ID for landing source |
 
@@ -106,7 +107,7 @@ The route should:
 5. Call `POST /contacts/upsert` with:
    - contact basics (`firstName`, `lastName`, `email`, `phone`)
    - mapped custom fields
-   - static tag `wolca_organic`
+   - tag from `GHL_PRIMARY_TAG` (fallback: `wolca_organic`)
    - source string `WOLCA Private Tour Landing Page`
 6. Return a clean success/error payload to the frontend
 
@@ -119,7 +120,7 @@ The route should:
   "email": "jane@example.com",
   "phone": "4175550123",
   "source": "WOLCA Private Tour Landing Page",
-  "tags": ["wolca_organic"],
+  "tags": ["GHL_PRIMARY_TAG value"],
   "customFields": [
     { "id": "GHL_CF_GRADE_INTEREST_ID", "value": "3rd Grade" },
     { "id": "GHL_CF_SERVICE_TYPE_ID", "value": "Private Tour Request" },
@@ -173,13 +174,13 @@ If an existing workflow is still tied to Facebook Lead Form triggers, replace it
 
 ### Updated admissions trigger
 - Trigger type: **Contact Tag**
-- Tag: `wolca_organic`
+- Tag: same value as `GHL_PRIMARY_TAG` (example: `wolca_organic`)
 - Event: **Added**
 
-When `/api/ghl-lead` upserts the contact and applies `wolca_organic`, this workflow fires immediately.
+When `/api/ghl-lead` upserts the contact and applies your `GHL_PRIMARY_TAG` value, this workflow fires immediately.
 
 ### Tag step inside workflow
-- If the workflow currently adds `wolca_organic` again, remove that step
+- If the workflow currently adds your `GHL_PRIMARY_TAG` value again, remove that step
 - Duplicate tag adds are generally harmless but unnecessary
 
 ---
@@ -193,7 +194,7 @@ When `/api/ghl-lead` upserts the contact and applies `wolca_organic`, this workf
 4. Verify in GHL:
    - Contact created or updated
    - Grade custom field is correct
-   - `wolca_organic` tag is present
+   - Tag from `GHL_PRIMARY_TAG` is present
    - Admissions workflow executed
 
 ### Test scenarios
@@ -240,8 +241,8 @@ When `/api/ghl-lead` upserts the contact and applies `wolca_organic`, this workf
 Workflow: WOLCA Admissions Lead Intake
 Step 1 trigger:
 - Type: Contact Tag
-- Tag: wolca_organic
+- Tag: value of GHL_PRIMARY_TAG (example: wolca_organic)
 - Event: Added
 
-This trigger runs whenever the landing page API upsert adds wolca_organic.
+This trigger runs whenever the landing page API upsert adds the `GHL_PRIMARY_TAG` value.
 ```

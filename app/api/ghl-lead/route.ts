@@ -4,7 +4,7 @@ const GHL_UPSERT_URL = "https://services.leadconnectorhq.com/contacts/upsert";
 const GHL_API_VERSION = "2021-07-28";
 const LANDING_SOURCE = "WOLCA Private Tour Landing Page";
 const SERVICE_TYPE = "Private Tour Request";
-const PRIMARY_TAG = "wolca_organic";
+const DEFAULT_PRIMARY_TAG = "wolca_organic";
 
 const allowedGrades = new Set([
   "Preschool",
@@ -152,6 +152,7 @@ export async function POST(request: Request) {
   const privateToken = getEnvValue("GHL_PRIVATE_TOKEN");
   const locationId = getEnvValue("GHL_LOCATION_ID");
   const gradeFieldId = getEnvValue("GHL_CF_GRADE_INTEREST");
+  const primaryTag = getEnvValue("GHL_PRIMARY_TAG") ?? DEFAULT_PRIMARY_TAG;
 
   if (!privateToken || !locationId || !gradeFieldId) {
     return NextResponse.json(
@@ -220,7 +221,7 @@ export async function POST(request: Request) {
     email: validated.data.email,
     phone: validated.data.phone,
     source: LANDING_SOURCE,
-    tags: [PRIMARY_TAG],
+    tags: [primaryTag],
     customFields,
   };
 
